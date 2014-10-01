@@ -1,0 +1,20 @@
+package com.lithium.perf.core.proxy;
+
+public enum FilterRequestsType {
+	
+	PNG(".png"), ICO(".ico"), JS(".js"), CSS(".css"), JPS(".jpg"), GIF(".gif");
+	
+	private String reqType;
+	
+	FilterRequestsType(String reqType)
+	{
+		this.reqType = reqType;
+	}
+	
+	public String getRequestsType(){
+		
+		return reqType;
+		
+	}
+
+}

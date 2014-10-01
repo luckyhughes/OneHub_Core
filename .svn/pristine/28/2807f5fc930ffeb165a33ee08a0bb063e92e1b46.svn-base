@@ -1,0 +1,49 @@
+package com.lithium.perf.testcases.lia;
+
+import org.testng.annotations.Test;
+
+import com.lithium.perf.adapter.ui.BaseUIPerfTest;
+import com.lithium.perf.library.ui.lia.HomePage;
+import com.lithium.perf.library.ui.lia.SearchPage;
+import com.lithium.perf.library.ui.lia.SearchResultsPage;
+
+
+
+public class TC1 extends BaseUIPerfTest{
+	
+	
+		
+	@Test (priority=1)
+	public void Search(){
+	
+		HomePage homepage = new HomePage(driver);
+		//HomePage homepage = PageFactory.initElements(driver,HomePage.class);
+					
+		SearchPage searchpage = homepage.openhomepage("http://google.com");
+		
+		@SuppressWarnings("unused")
+		SearchResultsPage searchresultspage = searchpage.submitSearch("lithium");
+		
+		driver.quit();
+
+	}
+	
+	@Test (priority=2)
+	public void Homepage(){
+	// And now use this to visit Google
+	
+	System.out.println("In Step2");
+	
+	//HomePage homepage = PageFactory.initElements(driver,HomePage.class);
+	
+	HomePage homepage = new HomePage(driver);
+	
+	SearchPage searchpage = homepage.openhomepage("http://google.com");
+	
+	@SuppressWarnings("unused")
+	SearchResultsPage searchresultspage = searchpage.submitSearch("yoga");
+
+	}
+	
+
+}

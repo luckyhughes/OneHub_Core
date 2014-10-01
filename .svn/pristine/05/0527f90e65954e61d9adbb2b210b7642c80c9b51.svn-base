@@ -1,0 +1,27 @@
+package com.lithium.perf.core.jmxgenerator;
+
+import net.lightbody.bmp.proxy.ProxyServer;
+
+public class  ProcessEntry{
+	
+	ProxyServer server;
+	
+	ProcessEntry(ProxyServer serv)
+	{
+		this.server = serv;
+	}
+	public void clearlog()
+	{
+		server.cleanup();
+		
+	}
+	
+	public void logRequest()
+	{
+		server.cleanup();
+		
+	}
+	
+	
+
+}

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Default suite]">
+  <test name="Default test(failed)">
+    <classes>
+      <class name="com.ge.ams.perf.testcases.lia.TC1">
+        <methods>
+          <include name="viewSinglePart"/>
+          <include name="OpenModelPage"/>
+          <include name="log"/>
+          <include name="viewSingleAsset"/>
+          <include name="clear"/>
+          <include name="ClassificationPage"/>
+          <include name="PartPage"/>
+          <include name="createPart"/>
+          <include name="viewAllAssets"/>
+          <include name="BasePerformanceTest"/>
+          <include name="homePage"/>
+          <include name="loginPage"/>
+          <include name="createClassification"/>
+          <include name="createAsset"/>
+          <include name="viewAllParts"/>
+        </methods>
+      </class> <!-- com.ge.ams.perf.testcases.lia.TC1 -->
+    </classes>
+  </test> <!-- Default test(failed) -->
+</suite> <!-- Failed suite [Default suite] -->

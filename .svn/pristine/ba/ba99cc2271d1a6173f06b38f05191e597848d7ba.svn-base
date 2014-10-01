@@ -1,0 +1,3 @@
+driverType=firefox
+driverPath=/Users/sandeep.bansal/Documents/chromedriver
+performanceEnable=true

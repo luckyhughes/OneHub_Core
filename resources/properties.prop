@@ -1,0 +1,8 @@
+driverType=chrome
+driverPath=/Users/212397664/Development/Perf/chromedriver
+performanceEnable=true
+proxyPort=9084
+scriptDebug=true
+harFilePath=/Users/212397664/Documents/perf.har
+uiPerfLog=/Users/212397664/Documents/ui.log
+baseUrl=http://alp1assetmgt01.cloud.ge.com:9000

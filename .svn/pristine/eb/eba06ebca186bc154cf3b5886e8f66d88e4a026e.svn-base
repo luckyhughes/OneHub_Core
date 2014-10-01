@@ -1,0 +1,43 @@
+package com.lithium.perf.library.ui.lia;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
+
+import com.lithium.perf.api.ui.PerfWebDriver;
+
+
+
+public class SearchPage {
+	
+	PerfWebDriver driver;
+	
+	By searchboxLocator = By.name("q");
+	By searchButtonLocator = By.name("search_submit");
+	
+	//private WebElement q;
+	//private WebElement btnK;
+	
+
+	
+	SearchPage(PerfWebDriver driver){
+		this.driver = driver;
+	}
+	
+	
+	public SearchResultsPage submitSearch(String text) {
+		
+		System.out.println("In submitSearch");
+		driver.findElement(searchboxLocator).sendKeys("lithium");
+		driver.findElement(searchButtonLocator).submit();
+		
+		//q.sendKeys(text);
+		//btnK.submit();
+
+		//System.out.println("Page title is: " + driver.getTitle());
+		
+		return new SearchResultsPage(driver);
+		//return PageFactory.initElements(driver, SearchResultsPage.class);
+	}
+
+}

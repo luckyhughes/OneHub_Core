@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [perf]">
+  <test name="TC1(failed)">
+    <classes>
+      <class name="com.ge.ams.perf.testcases.lia.TC1">
+        <methods>
+          <include name="BasePerformanceTest"/>
+          <include name="OpenModelPage"/>
+          <include name="log"/>
+          <include name="clear"/>
+          <include name="PartPage"/>
+          <include name="clean"/>
+          <include name="createPart"/>
+        </methods>
+      </class> <!-- com.ge.ams.perf.testcases.lia.TC1 -->
+    </classes>
+  </test> <!-- TC1(failed) -->
+</suite> <!-- Failed suite [perf] -->

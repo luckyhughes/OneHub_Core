@@ -1,0 +1,35 @@
+package com.lithium.perf.library.ui.lia;
+
+import org.openqa.selenium.support.PageFactory;
+
+import com.lithium.perf.api.ui.PerfWebDriver;
+
+
+
+public class HomePage {
+	
+	PerfWebDriver driver;
+	
+	String url;
+	
+	public HomePage(PerfWebDriver driver){
+		this.driver = driver;
+	}
+
+	public SearchPage openhomepage(String url) {
+				
+		System.out.println("In Step1");
+		
+		this.url = url;
+		driver.get(url);
+
+		System.out.println("Page title is: " + driver.getTitle());
+		
+		//return new SearchPage(driver);
+		return PageFactory.initElements(driver, SearchPage.class);
+		
+
+	}
+
+	
+}

@@ -1,0 +1,136 @@
+package com.lithium.perf.core.proxy;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.UnknownHostException;
+import java.util.Properties;
+
+import net.lightbody.bmp.proxy.ProxyServer;
+
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
+
+import com.lithium.perf.adapter.ui.UIChromeDriver;
+import com.lithium.perf.adapter.ui.UIFirefoxDriver;
+import com.lithium.perf.api.ui.PerfWebDriver;
+
+public class DriverDefault{
+
+	String driverType;
+	String driverPath;
+	Properties prop;
+	PerfWebDriver driver = null;
+	ProxyServer server;
+	DesiredCapabilities capabilities;
+
+	public DriverDefault() {
+
+		prop = new Properties();
+		try {
+			prop.load(new FileInputStream("resources//properties.prop"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		if (IsPerfEnabled()) {
+
+			try {
+				EnablePerf();
+			} catch (UnknownHostException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+		setDriver();
+	}
+
+	public boolean IsPerfEnabled() {
+		String perfCheck = prop.getProperty("performanceEnable");
+		if (perfCheck.equals("true")) {
+			return true;
+		}
+		return false;
+	}
+
+	public void EnablePerf() throws UnknownHostException {
+		server = new ProxyServer(8082);
+		try {
+			server.start();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		server.setCaptureHeaders(true);
+
+		server.setCaptureContent(true);
+		server.setRequestTimeout(100000000);
+		server.newHar("/");
+		
+		
+
+		capabilities = null;
+		capabilities =  DesiredCapabilities.firefox();
+		
+		capabilities.setCapability(CapabilityType.PROXY, server.seleniumProxy());
+
+	}
+
+	public void setDriver() {
+		// TODO Auto-generated method stub
+
+		driverType = prop.getProperty("driverType");
+		driverPath = prop.getProperty("driverPath");
+
+		if (driverType.equals("chrome")) {
+			System.setProperty("webdriver.chrome.driver", driverPath);
+			driver = new UIChromeDriver(capabilities);
+		    
+			
+		} else if (driverType.equals("firefox")) {
+			
+			//System.setProperty("webdriver.firefox.bin", "/Applications/Firefox.app/Contents/MacOS/firefox-bin");
+			driver = new UIFirefoxDriver(capabilities);
+		}
+		
+		
+
+	}
+
+	public String getDriverType() {
+		// TODO Auto-generated method stub
+		return driverType;
+
+	}
+
+	public PerfWebDriver getDriver() {
+		// TODO Auto-generated method stub
+		return driver;
+
+	}
+
+	public ProxyServer getProxy() {
+		// TODO Auto-generated method stub
+		return server;
+
+	}
+
+	public void stopProxy() {
+		// TODO Auto-generated method stub
+		try {
+			server.stop();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+}

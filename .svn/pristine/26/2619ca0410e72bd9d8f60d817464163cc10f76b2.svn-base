@@ -1,0 +1,217 @@
+package com.lithium.perf.core.jmxgenerator;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+
+import com.lithium.perf.core.proxy.FilterRequestsType;
+
+import net.lightbody.bmp.core.har.HarEntry;
+import net.lightbody.bmp.core.har.HarNameValuePair;
+import net.lightbody.bmp.core.har.HarRequest;
+import net.lightbody.bmp.proxy.ProxyServer;
+
+public class ProcessEntry extends BaseProcessor {
+
+	private List<HarEntry> entrylist;
+	private HarRequest harRequest;
+	private String httpSamplerStart;
+	private String httpSamplerProp;
+	private String httpSamplerArguments;
+	private String httpSamplerEndClose;
+	private String DOMULTIPARTPOST = "false";
+	private String xmlRequest;
+
+	public List<HarEntry> getEnteries() {
+
+		entrylist = server.getHar().getLog().getEntries();
+		return entrylist;
+	}
+
+	public List<HarEntry> filterEnteries() {
+
+		entrylist = getEnteries();
+
+		for (int i = 0; i < entrylist.size(); i++) {
+
+			harRequest = entrylist.get(i).getRequest();
+
+			for (FilterRequestsType filter : FilterRequestsType.values()) {
+
+				if (harRequest.getUrl().endsWith(filter.getRequestsType())) {
+					entrylist.remove(i);
+					break;
+				}
+			}
+
+		}
+		return entrylist;
+
+	}
+
+	public String checkRequestType() {
+
+		String httpMethod = harRequest.getMethod();
+
+		if (httpMethod.equals("GET")) {
+			return "GET";
+		}
+
+		else if (httpMethod.equals("POST")) {
+			if (harRequest.getPostData().getParams() == null) {
+				DOMULTIPARTPOST = "true";
+				return "POST";
+			}
+
+			else
+				return "POST";
+		}
+
+		return "NOT FOUND";
+
+	}
+
+	public void processRequest() {
+
+		for (HarEntry entry : filterEnteries()) {
+
+			harRequest = entry.getRequest();
+
+			String reqType = checkRequestType();
+
+			if (reqType.equals("GET")) {
+				processGet();
+			}
+
+			else if (reqType.equals("POST")) {
+				processPost();
+			}
+
+			else if (reqType.equals("POST") && DOMULTIPARTPOST.equals("true")) {
+				processMultipartPost();
+			}
+		}
+
+	}
+
+	public void NameTransaction(HarRequest harrequest, String transactionName) {
+		
+		
+
+	}
+
+	public String getRequestUrlpath() {
+
+		String url = harRequest.getUrl();
+		String urlpath = url.substring(url.indexOf("/"), url.length());
+
+		return urlpath;
+
+	}
+
+	public String processRequestUrlpath() {
+
+		httpSamplerStart = JMXFileFormat.httpSamplerStart;
+
+		String urlpath = getRequestUrlpath();
+
+		return httpSamplerStart = httpSamplerStart.replaceAll("REQUESTNAME",
+				urlpath);
+
+	}
+
+	public HashMap<String, String> getRequestQueryParam() {
+
+		List<HarNameValuePair> queryHarList = harRequest.getQueryString();
+		HashMap<String, String> queryParamMap = new HashMap<String, String>();
+
+		for (HarNameValuePair entry : queryHarList) {
+
+			queryParamMap.put(entry.getName(), entry.getValue());
+
+		}
+
+		return queryParamMap;
+
+	}
+
+	public String processGetRequestQueryParams() {
+
+		HashMap<String, String> queryParamMap = getRequestQueryParam();
+
+		StringBuilder httpSamplerArgumentsBuilder = new StringBuilder();
+
+		if (queryParamMap != null) {
+
+			for (Entry<String, String> entry : queryParamMap.entrySet()) {
+
+				httpSamplerArgumentsBuilder
+						.append(JMXFileFormat.httpSamplerArguments.replace(
+								"HTTPPARAMETER", entry.getKey()).replace(
+								"HTTPVALUE", entry.getValue()));
+			}
+
+		}
+
+		return httpSamplerArgumentsBuilder.toString();
+
+	}
+
+	public String processGetRequestProp() {
+
+		StringBuilder httpSamplerPropBuilder = new StringBuilder();
+
+		httpSamplerPropBuilder.append(JMXFileFormat.httpSamplerProp
+				.replace("HTTPURL", getRequestUrlpath())
+				.replace("HTTPMETHOD", checkRequestType())
+				.replace("DOMULTIPARTPOST", DOMULTIPARTPOST));
+		
+		return httpSamplerPropBuilder.toString();
+
+	}
+
+	public void processGet() {
+		
+		StringBuilder xmlRequestBuilder = new StringBuilder();
+
+		// add logic of paramerization or correlation to replace url if
+		// applicable
+		// Add logic of getting transaction name
+		httpSamplerStart = processRequestUrlpath();
+
+		// add logic of parameterization or correlation for query string if
+		// applicable
+		httpSamplerArguments = processGetRequestQueryParams();
+
+		// Add logic pf parameterization/correlation for prop here.
+		httpSamplerProp = processGetRequestProp();
+		
+		httpSamplerEndClose = JMXFileFormat.httpSamplerEndClose;
+		
+		xmlRequest = xmlRequestBuilder.append(httpSamplerStart).append(httpSamplerArguments).append(httpSamplerProp).append(httpSamplerEndClose).toString();
+		
+		JMXProcessor.writeToJMX(xmlRequest);
+
+	}
+
+	public void processPost() {
+
+		harRequest.getPostData();
+
+	}
+
+	public void processMultipartPost() {
+
+		harRequest.getPostData();
+
+	}
+
+	
+	public void cleanup() {
+		// TODO Auto-generated method stub
+		
+		entrylist.clear();
+		
+	}
+
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="perf">
+
+	<test name="TC1" parallel="false" preserve-order="true">
+		<classes>
+			<class name="com.ge.ams.perf.testcases.lia.TC1" />
+			<methods>
+				<include name="loginPage" />
+				<include name="homePage" />
+<!-- 				<include name="createAsset" /> -->
+<!-- 				<include name="viewAllAssets" /> -->
+<!-- 				<include name="viewSingleAsset" /> -->
+<!-- 				<include name="OpenModelPage" /> -->
+<!-- 				<include name="ClassificationPage" /> -->
+<!-- 				<include name="createClassification" /> -->
+				<include name="OpenModelPage" />
+				<include name="PartPage" />
+				<include name="createPart" />
+<!-- 				<include name="viewAllParts" /> -->
+<!-- 				<include name="viewSinglePart" /> -->
+			</methods>
+		</classes>
+
+	</test>
+</suite>

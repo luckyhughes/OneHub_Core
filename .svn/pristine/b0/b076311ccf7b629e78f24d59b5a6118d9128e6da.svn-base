@@ -1,0 +1,47 @@
+package com.lithium.perf.core.jmxgenerator;
+
+import com.lithium.perf.core.proxy.DriverDefault;
+
+import net.lightbody.bmp.proxy.ProxyServer;
+
+public class BaseProcessor {
+	
+	protected static ProxyServer server;
+	
+	ProcessEntry procesentry;
+	
+	public BaseProcessor()
+	{
+		server = DriverDefault.getProxy();
+		procesentry = new ProcessEntry();
+	}
+	
+	public void startJMX() {
+
+		JMXProcessor.preJMX();
+
+	}
+
+	public void endJMX() {
+
+		JMXProcessor.postJMX();
+
+	}
+	
+	public void clearlog()
+	{
+		procesentry.cleanup();
+		
+	}
+	
+	public void logRequest()
+	{
+		
+		procesentry.processRequest();
+		
+		
+	}
+	
+	
+
+}

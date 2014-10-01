@@ -1,0 +1,71 @@
+package com.lithium.perf.core.jmxgenerator;
+
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.Map.Entry;
+
+import com.lithium.perf.core.config.ConfigTest;
+
+public class JMXProcessor {
+
+	private static PrintWriter jmxWriter;
+	private static String jmxFilename;
+
+	static {
+
+		jmxFilename = ConfigTest.getValue("JMXFILEPATH")
+				+ ConfigTest.getValue("JMXFILENAME");
+		try {
+			jmxWriter = new PrintWriter(jmxFilename, "UTF-8");
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static PrintWriter getJmxWriter() {
+		return jmxWriter;
+	}
+	
+	public static void writeToJMX(String text) {
+
+		jmxWriter.write(text);
+
+	}
+	
+
+	public static void preJMX() {
+		
+		String testplan = new String(JMXFileFormat.jmxTestPlanStart);
+		
+		String newtestplan = null;
+							
+		for(Entry<String, String> entry : ConfigTest.getMap().entrySet()) {
+			
+			newtestplan = testplan.replace(entry.getKey(), entry.getValue());
+			
+			testplan = newtestplan;
+			
+			//only for testing...
+			System.out.println("config key value pair :-" + entry.getKey() + "," + entry.getValue() );
+									
+		}
+		
+		writeToJMX(newtestplan);
+
+	}
+
+	public static void postJMX() {
+
+		writeToJMX(JMXFileFormat.JmxPlanEnd);
+		jmxWriter.close();
+		
+		System.out.println("jmx file has been created at : " + jmxFilename);
+
+	}
+
+}

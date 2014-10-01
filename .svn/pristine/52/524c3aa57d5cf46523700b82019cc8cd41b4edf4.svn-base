@@ -1,0 +1,18 @@
+package com.lithium.perf.adapter.ui;
+
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
+import com.lithium.perf.api.ui.PerfWebDriver;
+
+
+public class UIRemoteWebDriver extends RemoteWebDriver implements PerfWebDriver{
+	
+	
+	UIRemoteWebDriver(Capabilities desiredCapabilities) {
+		super(desiredCapabilities);
+	
+	}
+	
+}
+	

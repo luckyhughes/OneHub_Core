@@ -1,0 +1,18 @@
+package com.lithium.perf.library.ui.lia;
+
+import org.openqa.selenium.By;
+
+import com.lithium.perf.api.ui.PerfWebDriver;
+
+public class SearchResultsPage {
+	
+	
+	PerfWebDriver driver;
+	
+	By searchboxLocator = By.name("q");
+	
+	SearchResultsPage(PerfWebDriver driver){
+		this.driver = driver;
+	}
+
+}
